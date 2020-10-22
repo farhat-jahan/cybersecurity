@@ -1,0 +1,77 @@
+*{
+	margin: 0;
+}
+
+body{
+    background-image:  url("../images/cybersecurity_1.jpg");
+    height:100vh;
+    background-size:cover;
+    background-position:center;
+}
+
+.full-header{
+  width: 100%;
+  height: 80px;
+  background: white;
+  margin: auto;
+  padding: 10px;
+  }
+
+#main-page-heading{
+  /* background-image:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5))  url("./cybersecurity_1.jpg");*/
+    height=100px;
+    background-size:cover;
+    background-position:center;
+    float:right;
+    margin-top:40px;
+    margin-right:40px;
+}
+
+#main-page-heading ul li{
+    display:inline-block;
+}
+
+#main-page-heading ul a{
+    text-decoration:none;
+    color:black;
+    padding:5px 20px;
+   /* border:1px solid #fff;*/
+    transition:0.6s ease;
+}
+
+#main-page-heading ul a:hover{
+    background-color:#fff;
+    color:#ff8080;
+}
+
+#main-page-heading ul li.active a{
+    background-color:#fff;
+    color:red;
+}
+
+#main-page-logo{
+    background : url("../images/logo.png") no-repeat;
+    background-size:100%;
+    margin:10px;
+    width:145px;
+    height:85px;
+    float:left;
+}
+
+#footer{
+    position:absolute;
+    top:95%;
+    border:1px solid white;
+    width: 100%;
+    height: 50px;
+    background: white;
+    margin: auto;
+}
+#right-reserved h4{
+    float:right;
+    margin-right:700px;
+}
+#privacy{
+    float:right;
+    margin-right:780px;
+}

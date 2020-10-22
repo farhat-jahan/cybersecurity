@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Cyber Security Project</title>
+<link rel="stylesheet" media="screen" href="{% static "weakpassword/css/frontend.css" %}">
+<script src="{% static "weakpassword/js/jquery-1.9.0.min.js" %}" type="text/javascript"></script>
+<script src="{% static "js/jquery.infieldlabel.min.js" %}" type="text/javascript"></script>
+</head>
+<body style="zoom: 1;">
+
+	<div class="full-header">
+	<div id="main-page-logo">
+
+	</div>
+
+	<div id="main-page-heading">
+			<div>
+				<ul>
+					<li class="active"><a href=""> Home  </a></li>
+					<li> <a href=""> About  </a> </li>
+					<li> <a href=""> Login  </a> </li>
+
+				</ul>
+			</div>
+	</div>
+	</div>
+
+
+
+		{% block content %} {% endblock %}
+
+
+
+	</div>
+
+	<div id="footer">
+		<div id="right-reserved"> <h4>© Farhat @ITU,  All rights reserved</h4></div>
+
+		<!--<div id="footer-left">
+			<div id="cyber-quote"> One single vulnerability is all an attacker needs </div>
+			<div id="cyber-name">By: Window snyder, Chief security officer, Fastly</div>
+		</div>-->
+
+		<div id="privacy">
+			<a href="">Privacy Plicy</a>
+		</div>
+
+	</div>
+
+</body>
+</html>

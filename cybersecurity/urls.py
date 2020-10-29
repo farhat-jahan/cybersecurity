@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from weakpassword.views import index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('apis/', include('weakpassword.urls')),
+    path('cyber/indexpage/', index, name='index'),
+
+    path('cyber/apis/', include('weakpassword.urls')),
 ]

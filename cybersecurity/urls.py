@@ -18,5 +18,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('website/', include('weakpassword.urls')),
+    path('apis/', include('weakpassword.urls')),
 ]

@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'weakpassword'
+    'weakpassword',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -158,3 +159,26 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 #print(STATICFILES_DIRS)
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+       # 'rest_framework.permissions.DjangoModelPermissions',
+       #  'rest_framework.renderers.JSONRenderer',
+       # 'rest_framework.renderers.BrowsableAPIRenderer',
+       #  'rest_framework.authentication.BasicAuthentication',
+       # 'rest_framework.authentication.SessionAuthentication',
+       # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
+    ]
+}
+
+#https://www.django-rest-framework.org/api-guide/permissions/
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    # 'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    # 'django.contrib.auth.hashers.Argon2PasswordHasher',
+    # 'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+]

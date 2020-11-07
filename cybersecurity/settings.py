@@ -169,9 +169,14 @@ REST_FRAMEWORK = {
        # 'rest_framework.renderers.BrowsableAPIRenderer',
        #  'rest_framework.authentication.BasicAuthentication',
        # 'rest_framework.authentication.SessionAuthentication',
-       # 'rest_framework.permissions.IsAuthenticated',
-        'rest_framework.permissions.AllowAny',
-    ]
+       'rest_framework.permissions.IsAuthenticated',
+       #  'rest_framework.permissions.AllowAny',
+        #'rest_framework.permissions.IsAdminUser',
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+     'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+     )
 }
 
 #https://www.django-rest-framework.org/api-guide/permissions/
@@ -182,3 +187,5 @@ PASSWORD_HASHERS = [
     # 'django.contrib.auth.hashers.Argon2PasswordHasher',
     # 'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
 ]
+
+#AUTH_USER_MODEL = 'User'

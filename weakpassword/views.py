@@ -14,7 +14,8 @@ from django.core import serializers
 from django.contrib.auth import authenticate
 import datetime
 
-from .serializer import UserProfileSerializer, UserProfileUpdateSerializer, UserUpdateSerializer
+from .serializer import UserProfileSerializer, UserUpdateSerializer, \
+    UserAndUserProfileSerializer
 from . models import UserProfile
 
 #TODO : JSONResponse is not used
@@ -34,6 +35,7 @@ def index(request):
     :return:
     """
     return render(request, 'weakpassword/index.html')
+
 
 @api_view(['POST'])
 @permission_classes((AllowAny,))
@@ -67,19 +69,11 @@ def add_user(request):
                 'success': 'True',
                 'status code': status.HTTP_200_OK,
                 'message': 'User added successfully',
-                'user data': user_serailizer.data
+                'user data': request.data
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
     return Response(user_serailizer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-@api_view(['GET'])
-@permission_classes((AllowAny,))
-def test_add_user():
-    pass
-
 
 
 @api_view(['GET'])
@@ -90,8 +84,8 @@ def get_users(request):
     :param request: None
     :return: registered/ all Users
     """
-    user_details = UserProfile.objects.all()
-    serilizer_data = UserProfileSerializer(user_details, many=True)
+    user_details = UserProfile.objects.all().select_related('user')
+    serilizer_data = UserAndUserProfileSerializer(user_details, many=True)
     return JSONResponse(serilizer_data.data)
 
 
@@ -106,15 +100,14 @@ def update_user(request, user_id):
     """
     try:
         user_id = int(user_id)
-        check_user =  User.objects.get(id=user_id)
+        check_user =  User.objects.get(id=user_id)#.prefetch_related('')
         check_user_serealizer = UserUpdateSerializer(check_user, data=request.data)
 
         if check_user_serealizer.is_valid():
             check_user_serealizer.update(check_user, request.data)
-            print(check_user_serealizer.to_representation(check_user))
             return Response(check_user_serealizer.data, status=status.HTTP_200_OK)
 
-        return Response(check_user_serealizer.errors,status=status.HTTP_404_NOT_FOUND)
+        return Response(check_user_serealizer.errors,status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
         print(e)
@@ -130,6 +123,7 @@ def delete_user(request, user_id):
         :param arg: user id # this is User model's id
         :return:
         """
+
     try:
         user_id = int(user_id)
         check_user = User.objects.get(id=user_id)
@@ -139,7 +133,7 @@ def delete_user(request, user_id):
     try:
         userprofile = UserProfile.objects.get(user=user_id)
     except :
-        return Response({'userprofile':'noooo'}, status=status.HTTP_200_OK)
+        return Response({'Error':'Userprofile does not existed'}, status=status.HTTP_200_OK)
 
     check_user.delete()
     userprofile.delete()

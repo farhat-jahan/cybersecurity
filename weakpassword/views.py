@@ -12,13 +12,16 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.core import serializers
 from django.contrib.auth import authenticate
+from django.shortcuts import render, redirect
 import datetime
 
+
 from .serializer import UserProfileSerializer, UserUpdateSerializer, \
-    UserAndUserProfileSerializer
+    UserAndUserProfileSerializer, UserProfileJWTSerializer
 from . models import UserProfile
 
 #TODO : JSONResponse is not used
+##Farhat jahan.Student iD: 95705
 class JSONResponse(HttpResponse):
     """
     An HttpResponse that renders its content into JSON.
@@ -28,15 +31,8 @@ class JSONResponse(HttpResponse):
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
 
-def index(request):
-    """
-    This function is used to display website index-page
-    :param request:
-    :return:
-    """
-    return render(request, 'weakpassword/index.html')
-
-
+##################################### API's , without authentication #####################
+##Farhat jahan.Student iD: 95705
 @api_view(['POST'])
 @permission_classes((AllowAny,))
 def add_user(request):
@@ -145,15 +141,17 @@ def delete_user(request, user_id):
     return Response(response_data, status=status.HTTP_200_OK)
 
 
+############################    FROM BELOW AUTHORIZATION IS IMPLEMENTED  ##########################################
+
 @api_view(['POST'])
 @permission_classes((AllowAny,))
-def generate_jwt(request):
+def get_jwt(request):
 
     user = authenticate(username=request.data['username'], password=request.data['password'])
     if user is None:
         return Response({'Error': 'Could not authenticate username & password'}, status=status.HTTP_403_FORBIDDEN)
     else:
-        user_jwt = create_jwt(user)
+        user_jwt = generate_jwt(user)
         response_data = {
             'success': 'True',
             'status code': status.HTTP_200_OK,
@@ -163,7 +161,7 @@ def generate_jwt(request):
         return Response(response_data, status=status.HTTP_200_OK)
 
 
-def create_jwt(user):
+def generate_jwt(user):
 
     api_settings.JWT_EXPIRATION_DELTA = datetime.timedelta(seconds=30000)
     jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
@@ -174,7 +172,6 @@ def create_jwt(user):
     return jwt_token
 
 @api_view(['POST'])
-@permission_classes
 def adduser_using_jwt(request):
     """
         Creates users and returns users: 'after authenticating the JWT'
@@ -183,36 +180,27 @@ def adduser_using_jwt(request):
         """
     try:
         check_user = User.objects.get(username=request.data['username'])
-        check_user.check_password(request.data['password'])
-        return Response({'Error': 'Username:' + request.data['username'] +' already existed'} \
-                            , status=status.HTTP_400_BAD_REQUEST)
-
-            # check_user = authenticate(username=request.data['username'], password=request.data['password'])
-            # if check_user is None:
-            #     return Response({"duplicate data": "False"})
-            # else:
-            #     return Response({'User already exited':request.data['username']+ ' and ' +request.data['password']}\
-            #                 , status=status.HTTP_400_BAD_REQUEST)
-
+        # check_user.check_password(request.data['password'])
+        return Response({'Error': 'Username: ' + request.data['username'] + ' is already existed'}, status=status.HTTP_400_BAD_REQUEST)
     except:
         create_user = User(username=request.data['username'])
         create_user.set_password(request.data['password'])
         create_user.save()
-
         create_user.first_name = request.data['first_name']
         create_user.last_name = request.data['last_name']
         create_user.save()
 
-        user_serailizer = UserProfileSerializer(data={'contact_number': request.data['contact_number'] \
-            , 'date_of_birth': request.data['date_of_birth'], 'gender': request.data['gender'] \
-            , 'user': create_user.id, 'address': request.data['address']})
+    user_serailizer = UserProfileSerializer(data={'contact_number': request.data['contact_number'] \
+                                                 ,'date_of_birth': request.data['date_of_birth'],
+                                                  'gender': request.data['gender'] \
+        , 'user': create_user.id, 'address': request.data['address']})
     if user_serailizer.is_valid():
         user_serailizer.save()
         response_data = {
-                'success': 'True',
-                'status code': status.HTTP_200_OK,
-                'message': 'User added successfully',
-                'user data': user_serailizer.data
+            'success': 'True',
+            'status code': status.HTTP_200_OK,
+            'message': 'User added successfully',
+            'user data': request.data
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
@@ -220,13 +208,27 @@ def adduser_using_jwt(request):
 
 
 @api_view(['GET'])
-def getusers_using_jwt():
+# @permission_classes((IsAuthenticated,))
+# @authentication_classes((JSONWebTokenAuthentication,))
 
-    print("here inside=================")
+def getusers_using_jwt(request):
     user_details = UserProfile.objects.all()
-    serilizer_data = UserProfileSerializer(user_details, many=True)
-    return JSONResponse(serilizer_data.data)
+    print(user_details)
+    serilizer_data = UserProfileJWTSerializer(user_details, many=True)
+    return Response(serilizer_data.data, status=status.HTTP_200_OK)
 
+############################    FROM BELOW UI side will be created wd JWT    ######################################
+def index(request):
+    """
+    This function is used to display website index-page
+    :param request:
+    :return:
+    """
+    #return render(request, 'website_base.html')
+    return render(request, 'weakpassword/index.html')
 
+#from django.http import HttpResponseRedirect
+def user_registration(request):
+    return render(request, 'weakpassword/registration.html')
 
 

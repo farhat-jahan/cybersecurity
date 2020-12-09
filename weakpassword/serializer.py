@@ -67,5 +67,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             return userprofile_data
         return {'Userprofile': None}
 
+class UserProfileJWTSerializer(serializers.ModelSerializer):
+    date_of_birth = fields.DateField(input_formats=['%Y-%m-%d'])
+    class Meta:
+        model  = UserProfile
+        fields = ['user','date_of_birth','contact_number', 'address']
+
 
 

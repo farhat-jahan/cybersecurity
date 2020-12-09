@@ -20,13 +20,16 @@
 				<ul>
 					<li class="active"><a href=""> Home  </a></li>
 					<li> <a href=""> About  </a> </li>
-					<li> <a href=""> Login  </a> </li>
+					<li> <a href="{% url 'user_registration' %}">  SignUp</a> </li>
+
+					<li><a> SignIn  </a></li>
+					<!--<li> <a href=""> About  </a> </li>-->
+
 
 				</ul>
 			</div>
 	</div>
 	</div>
-
 
 
 		{% block content %} {% endblock %}

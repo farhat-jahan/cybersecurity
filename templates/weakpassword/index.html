@@ -1,12 +1,23 @@
-{% extends "website_base.html" %}
+{% extends 'website_base.html' %}
+{% load static %}
 
 {% block content %}
+<style>
 
-<p >Need to put real content in the index page.</p>
+#website-image-body{
 
+    background-repeat: no-repeat;
+    width: auto; /*or your image's width*/
+    height: auto; /*or your image's height*/
 
+    width:1110px;
+    margin:0 auto;
+ }
 
+</style>
 
-
+    <div id="website-image-body" >
+	    <img src="{% static "weakpassword/images/cybersecurity_1.jpg" %}">
+	</div>
 
 {% endblock %}
